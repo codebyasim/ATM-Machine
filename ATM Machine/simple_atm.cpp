@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <limits>
 #include "Account.h"
+#include <vector>
 
 using namespace std;
 
@@ -103,10 +104,43 @@ void withdraw(Account& account) {
          << account.getBalance() << "\n";
 }
 
+    Account* findAccount(vector<Account>& accounts, int accountNumber) {
+
+    for (Account& account : accounts) {
+
+        if (account.getAccountNumber() == accountNumber) {
+            return &account;
+        }
+    }
+
+    return nullptr;
+}
+
 int main() {
 
-    Account account(10001, "Asim", 1000.00);
+   vector<Account> accounts;
 
+    accounts.push_back(Account(10001, "Asim", 1000.00));
+    accounts.push_back(Account(10002, "Ahmed", 2000.00));
+    accounts.push_back(Account(10003, "John", 1500.00));
+
+    int accountNumber;
+
+    cout << "\nEnter account number: ";
+    cin >> accountNumber;
+
+    Account* account = findAccount(accounts, accountNumber);
+
+    if (account == nullptr) {
+    cout << "Account not found.\n";
+    return 0;
+    }
+
+    cout << "Welcome, "
+     << account->getAccountHolder()
+     << "!\n";
+
+    
     int choice;
 
     cout << "============================\n";
@@ -135,17 +169,17 @@ int main() {
 
         if (choice == 1) {
 
-            checkBalance(account);
+            checkBalance(*account);
 
         }
         else if (choice == 2) {
 
-            deposit(account);
+            deposit(*account);
 
         }
         else if (choice == 3) {
 
-            withdraw(account);
+            withdraw(*account);
 
         }
         else if (choice == 4) {
