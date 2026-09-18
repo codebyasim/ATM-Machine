@@ -1,121 +1,64 @@
 #include <iostream>
 #include <iomanip>
 #include <limits>
-#include "Account.h"
-#include <vector>
+#include "Bank.h"
 
 using namespace std;
 
-// Display ATM menu
 void displayMenu() {
-
-    cout << "\n----- ATM MENU -----\n";
-    cout << "1. Check Balance\n";
+    cout << "\n1. Check Balance\n";
     cout << "2. Deposit\n";
     cout << "3. Withdraw\n";
     cout << "4. Transaction History\n";
     cout << "5. Transfer Money\n";
     cout << "6. Exit\n";
-    cout << "Choose an option: ";
+    cout << "Choose: ";
 }
 
-// Check balance
 void checkBalance(const Account& account) {
-
     cout << fixed << setprecision(2);
-
-    cout << "Your balance is: GBP "
-         << account.getBalance() << "\n";
+    cout << "Balance: GBP " << account.getBalance() << "\n";
 }
 
-// Deposit
 void deposit(Account& account) {
-
     double amount;
 
-    cout << "Enter amount to deposit: GBP ";
+    cout << "Enter deposit: GBP ";
     cin >> amount;
 
-    if (cin.fail()) {
-
+    if (cin.fail() || amount <= 0) {
         cin.clear();
-
-        cin.ignore(
-            numeric_limits<streamsize>::max(),
-            '\n'
-        );
-
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid amount.\n";
-        return;
-    }
-
-    if (amount <= 0) {
-
-        cout << "Amount must be greater than GBP 0.\n";
         return;
     }
 
     account.deposit(amount);
 
-    cout << fixed << setprecision(2);
-
-    cout << "Deposit successful.\n";
-    cout << "New balance: GBP "
+    cout << "Deposit successful. Balance: GBP "
          << account.getBalance() << "\n";
 }
 
-// Withdraw
 void withdraw(Account& account) {
-
     double amount;
 
-    cout << "Enter amount to withdraw: GBP ";
+    cout << "Enter withdrawal: GBP ";
     cin >> amount;
 
-    if (cin.fail()) {
-
+    if (cin.fail() || amount <= 0) {
         cin.clear();
-
-        cin.ignore(
-            numeric_limits<streamsize>::max(),
-            '\n'
-        );
-
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid amount.\n";
         return;
     }
 
-    if (amount <= 0) {
-
-        cout << "Amount must be greater than GBP 0.\n";
-        return;
-    }
-
-    if (amount > account.getBalance()) {
-
+    if (!account.withdraw(amount)) {
         cout << "Insufficient balance.\n";
         return;
     }
 
-    account.withdraw(amount);
-
-    cout << fixed << setprecision(2);
-
-    cout << "Withdrawal successful.\n";
-    cout << "New balance: GBP "
+    cout << "Withdrawal successful. Balance: GBP "
          << account.getBalance() << "\n";
-}
-
-    Account* findAccount(vector<Account>& accounts, int accountNumber) {
-
-    for (Account& account : accounts) {
-
-        if (account.getAccountNumber() == accountNumber) {
-            return &account;
-        }
-    }
-
-    return nullptr;
 }
 
 void showTransactionHistory(const Account& account) {
@@ -138,14 +81,14 @@ void showTransactionHistory(const Account& account) {
     }
 }
 
-void transferMoney(Account& sender, vector<Account>& accounts) {
+void transferMoney(Account& sender, Bank& bank) {
     int recipientNumber;
     double amount;
 
     cout << "Enter recipient account number: ";
     cin >> recipientNumber;
 
-    Account* recipient = findAccount(accounts, recipientNumber);
+    Account* recipient = bank.findAccount(recipientNumber);
 
     if (recipient == nullptr) {
         cout << "Recipient account not found.\n";
@@ -177,22 +120,26 @@ void transferMoney(Account& sender, vector<Account>& accounts) {
 
 int main() {
 
-   vector<Account> accounts;
+    Bank bank;
 
-    accounts.push_back(Account(10001, "Asim", 1000.00, 1234));
-    accounts.push_back(Account(10002, "Ahmed", 2000.00, 5678));
-    accounts.push_back(Account(10003, "John", 1500.00, 4321));
+    bank.addAccount(Account(10001, "Asim", 1000, 1234));
+    bank.addAccount(Account(10002, "Ahmed", 2000, 5678));
+    bank.addAccount(Account(10003, "John", 1500, 4321));
 
-    int accountNumber;
+    int number;
+
+    cout << "============================\n";
+    cout << "       C++ ATM SYSTEM       \n";
+    cout << "============================\n";
 
     cout << "\nEnter account number: ";
-    cin >> accountNumber;
+    cin >> number;
 
-    Account* account = findAccount(accounts, accountNumber);
+    Account* account = bank.findAccount(number);
 
     if (account == nullptr) {
-    cout << "Account not found.\n";
-    return 0;
+        cout << "Account not found.\n";
+        return 0;
     }
 
     int enteredPin;
@@ -217,72 +164,39 @@ int main() {
         return 0;
     }
 
+    cout << "\nWelcome, "
+         << account->getAccountHolder()
+         << "!\n";
 
-    cout << "Welcome, "
-     << account->getAccountHolder()
-     << "!\n";
-
-    
     int choice;
-
-    cout << "============================\n";
-    cout << "       C++ ATM SYSTEM       \n";
-    cout << "============================\n";
 
     while (true) {
 
         displayMenu();
-
         cin >> choice;
 
-        if (cin.fail()) {
-
-            cin.clear();
-
-            cin.ignore(
-                numeric_limits<streamsize>::max(),
-                '\n'
-            );
-
-            cout << "Invalid input. Please enter a number.\n";
-
-            continue;
-        }
-
-        if (choice == 1) {
-
+        if (choice == 1)
             checkBalance(*account);
 
-        }
-        else if (choice == 2) {
-
+        else if (choice == 2)
             deposit(*account);
 
-        }
-        else if (choice == 3) {
-
+        else if (choice == 3)
             withdraw(*account);
-
-        }
 
         else if (choice == 4)
             showTransactionHistory(*account);
 
         else if (choice == 5)
-            transferMoney(*account, accounts);
-        
+            transferMoney(*account, bank);
+
         else if (choice == 6) {
-
-            cout << "\nThank you for using the ATM.\n";
-            cout << "Goodbye!\n";
-
+            cout << "Thank you for using the ATM.\n";
             break;
-
         }
-        else {
 
-            cout << "Invalid choice. Please select 1-4.\n";
-        }
+        else
+            cout << "Invalid choice.\n";
     }
 
     return 0;
