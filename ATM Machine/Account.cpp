@@ -23,6 +23,7 @@ bool Account::verifyPin(int enteredPin) const {
 void Account::deposit(double amount) {
     if (amount > 0) {
         balance += amount;
+        transactions.push_back(Transaction("Deposit", amount));
     }
 }
 
@@ -32,9 +33,16 @@ bool Account::withdraw(double amount) {
     }
 
     balance -= amount;
+
+    transactions.push_back(Transaction("Withdrawal", amount));
+
     return true;
 }
 
 double Account::getBalance() const {
     return balance;
+}
+
+const std::vector<Transaction>& Account::getTransactions() const {
+    return transactions;
 }

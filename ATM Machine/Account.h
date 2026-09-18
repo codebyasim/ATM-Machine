@@ -2,6 +2,8 @@
 #define ACCOUNT_H
 
 #include <string>
+#include <vector>
+#include "Transaction.h"
 
 class Account {
 
@@ -10,6 +12,7 @@ private:
     std::string accountHolder;
     double balance;
     int pin;
+    std::vector<Transaction> transactions;
 
 public:
     Account(int number, std::string name, double initialBalance, int accountPin);
@@ -22,6 +25,8 @@ public:
     void deposit(double amount);
     bool withdraw(double amount);
     double getBalance() const;
+
+    const std::vector<Transaction>& getTransactions() const;
 };
 
 #endif
