@@ -122,9 +122,13 @@ int main() {
 
     Bank bank;
 
-    bank.addAccount(Account(10001, "Asim", 1000, 1234));
-    bank.addAccount(Account(10002, "Ahmed", 2000, 5678));
-    bank.addAccount(Account(10003, "John", 1500, 4321));
+    bank.loadAccounts("accounts.txt");
+
+    if (bank.getAccounts().empty()) {
+        bank.addAccount(Account(10001, "Asim", 1000, 1234));
+        bank.addAccount(Account(10002, "Ahmed", 2000, 5678));
+        bank.addAccount(Account(10003, "John", 1500, 4321));
+}
 
     int number;
 
@@ -191,9 +195,11 @@ int main() {
             transferMoney(*account, bank);
 
         else if (choice == 6) {
-            cout << "Thank you for using the ATM.\n";
-            break;
-        }
+        bank.saveAccounts("accounts.txt");
+        cout << "Account data saved.\n";
+        cout << "Thank you for using the ATM.\n";
+        break;
+    }
 
         else
             cout << "Invalid choice.\n";
