@@ -105,7 +105,7 @@ void withdraw(Account& account) {
 
 int main() {
 
-    Account account(1000.00);
+    Account account(10001, "Asim", 1000.00);
 
     int choice;
 
