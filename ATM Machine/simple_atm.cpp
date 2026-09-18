@@ -122,7 +122,7 @@ int main() {
 
     accounts.push_back(Account(10001, "Asim", 1000.00, 1234));
     accounts.push_back(Account(10002, "Ahmed", 2000.00, 5678));
-    accounts.push_back(Account(10003, "John", 1500.00, 9101));
+    accounts.push_back(Account(10003, "John", 1500.00, 4321));
 
     int accountNumber;
 
@@ -135,6 +135,29 @@ int main() {
     cout << "Account not found.\n";
     return 0;
     }
+
+    int enteredPin;
+    bool authenticated = false;
+
+    for (int attempts = 3; attempts > 0; attempts--) {
+
+        cout << "Enter PIN: ";
+        cin >> enteredPin;
+
+        if (account->verifyPin(enteredPin)) {
+            authenticated = true;
+            break;
+        }
+
+        cout << "Incorrect PIN. Attempts remaining: "
+             << attempts - 1 << "\n";
+    }
+
+    if (!authenticated) {
+        cout << "Too many incorrect attempts. Access denied.\n";
+        return 0;
+    }
+
 
     cout << "Welcome, "
      << account->getAccountHolder()
