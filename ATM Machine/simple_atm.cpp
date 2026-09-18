@@ -13,7 +13,8 @@ void displayMenu() {
     cout << "1. Check Balance\n";
     cout << "2. Deposit\n";
     cout << "3. Withdraw\n";
-    cout << "4. Exit\n";
+    cout << "4. Transaction History\n";
+    cout << "5. Exit\n";
     cout << "Choose an option: ";
 }
 
@@ -116,6 +117,26 @@ void withdraw(Account& account) {
     return nullptr;
 }
 
+void showTransactionHistory(const Account& account) {
+    cout << "\n--- Transaction History ---\n";
+
+    const auto& transactions = account.getTransactions();
+
+    if (transactions.empty()) {
+        cout << "No transactions yet.\n";
+        return;
+    }
+
+    cout << fixed << setprecision(2);
+
+    for (const Transaction& transaction : transactions) {
+        cout << transaction.getType()
+             << ": GBP "
+             << transaction.getAmount()
+             << "\n";
+    }
+}
+
 int main() {
 
    vector<Account> accounts;
@@ -205,7 +226,11 @@ int main() {
             withdraw(*account);
 
         }
-        else if (choice == 4) {
+
+        else if (choice == 4)
+            showTransactionHistory(*account);
+        
+        else if (choice == 5) {
 
             cout << "\nThank you for using the ATM.\n";
             cout << "Goodbye!\n";
