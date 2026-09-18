@@ -39,6 +39,23 @@ bool Account::withdraw(double amount) {
     return true;
 }
 
+bool Account::transfer(Account& recipient, double amount) {
+    if (amount <= 0 || amount > balance) {
+        return false;
+    }
+
+    balance -= amount;
+    recipient.balance += amount;
+
+    transactions.push_back(Transaction("Transfer to " +
+                                       recipient.getAccountHolder(), amount));
+
+    recipient.transactions.push_back(Transaction("Transfer from " +
+                                                 accountHolder, amount));
+
+    return true;
+}
+
 double Account::getBalance() const {
     return balance;
 }

@@ -14,7 +14,8 @@ void displayMenu() {
     cout << "2. Deposit\n";
     cout << "3. Withdraw\n";
     cout << "4. Transaction History\n";
-    cout << "5. Exit\n";
+    cout << "5. Transfer Money\n";
+    cout << "6. Exit\n";
     cout << "Choose an option: ";
 }
 
@@ -137,6 +138,43 @@ void showTransactionHistory(const Account& account) {
     }
 }
 
+void transferMoney(Account& sender, vector<Account>& accounts) {
+    int recipientNumber;
+    double amount;
+
+    cout << "Enter recipient account number: ";
+    cin >> recipientNumber;
+
+    Account* recipient = findAccount(accounts, recipientNumber);
+
+    if (recipient == nullptr) {
+        cout << "Recipient account not found.\n";
+        return;
+    }
+
+    if (recipient == &sender) {
+        cout << "You cannot transfer to your own account.\n";
+        return;
+    }
+
+    cout << "Enter amount to transfer: GBP ";
+    cin >> amount;
+
+    if (cin.fail() || amount <= 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid amount.\n";
+        return;
+    }
+
+    if (!sender.transfer(*recipient, amount)) {
+        cout << "Insufficient balance.\n";
+        return;
+    }
+
+    cout << "Transfer successful.\n";
+}
+
 int main() {
 
    vector<Account> accounts;
@@ -229,8 +267,11 @@ int main() {
 
         else if (choice == 4)
             showTransactionHistory(*account);
+
+        else if (choice == 5)
+            transferMoney(*account, accounts);
         
-        else if (choice == 5) {
+        else if (choice == 6) {
 
             cout << "\nThank you for using the ATM.\n";
             cout << "Goodbye!\n";

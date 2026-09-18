@@ -24,6 +24,7 @@ public:
 
     void deposit(double amount);
     bool withdraw(double amount);
+    bool transfer(Account& recipient, double amount);
     double getBalance() const;
 
     const std::vector<Transaction>& getTransactions() const;
