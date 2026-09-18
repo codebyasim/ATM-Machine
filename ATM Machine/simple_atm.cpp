@@ -1,11 +1,13 @@
 #include <iostream>
 #include <iomanip>
 #include <limits>
+#include "Account.h"
 
 using namespace std;
 
 // Display ATM menu
 void displayMenu() {
+
     cout << "\n----- ATM MENU -----\n";
     cout << "1. Check Balance\n";
     cout << "2. Deposit\n";
@@ -14,14 +16,17 @@ void displayMenu() {
     cout << "Choose an option: ";
 }
 
-// Check account balance
-void checkBalance(double balance) {
+// Check balance
+void checkBalance(const Account& account) {
+
     cout << fixed << setprecision(2);
-    cout << "Your balance is: GBP " << balance << "\n";
+
+    cout << "Your balance is: GBP "
+         << account.getBalance() << "\n";
 }
 
-// Deposit money
-double deposit(double balance) {
+// Deposit
+void deposit(Account& account) {
 
     double amount;
 
@@ -29,32 +34,35 @@ double deposit(double balance) {
     cin >> amount;
 
     if (cin.fail()) {
+
         cin.clear();
+
         cin.ignore(
             numeric_limits<streamsize>::max(),
             '\n'
         );
 
         cout << "Invalid amount.\n";
-        return balance;
+        return;
     }
 
     if (amount <= 0) {
+
         cout << "Amount must be greater than GBP 0.\n";
-        return balance;
+        return;
     }
 
-    balance += amount;
+    account.deposit(amount);
 
     cout << fixed << setprecision(2);
-    cout << "Deposit successful.\n";
-    cout << "New balance: GBP " << balance << "\n";
 
-    return balance;
+    cout << "Deposit successful.\n";
+    cout << "New balance: GBP "
+         << account.getBalance() << "\n";
 }
 
-// Withdraw money
-double withdraw(double balance) {
+// Withdraw
+void withdraw(Account& account) {
 
     double amount;
 
@@ -62,38 +70,43 @@ double withdraw(double balance) {
     cin >> amount;
 
     if (cin.fail()) {
+
         cin.clear();
+
         cin.ignore(
             numeric_limits<streamsize>::max(),
             '\n'
         );
 
         cout << "Invalid amount.\n";
-        return balance;
+        return;
     }
 
     if (amount <= 0) {
+
         cout << "Amount must be greater than GBP 0.\n";
-        return balance;
+        return;
     }
 
-    if (amount > balance) {
+    if (amount > account.getBalance()) {
+
         cout << "Insufficient balance.\n";
-        return balance;
+        return;
     }
 
-    balance -= amount;
+    account.withdraw(amount);
 
     cout << fixed << setprecision(2);
-    cout << "Withdrawal successful.\n";
-    cout << "New balance: GBP " << balance << "\n";
 
-    return balance;
+    cout << "Withdrawal successful.\n";
+    cout << "New balance: GBP "
+         << account.getBalance() << "\n";
 }
 
 int main() {
 
-    double balance = 1000.00;
+    Account account(1000.00);
+
     int choice;
 
     cout << "============================\n";
@@ -106,32 +119,33 @@ int main() {
 
         cin >> choice;
 
-        // Validate menu input
         if (cin.fail()) {
 
             cin.clear();
+
             cin.ignore(
                 numeric_limits<streamsize>::max(),
                 '\n'
             );
 
             cout << "Invalid input. Please enter a number.\n";
+
             continue;
         }
 
         if (choice == 1) {
 
-            checkBalance(balance);
+            checkBalance(account);
 
         }
         else if (choice == 2) {
 
-            balance = deposit(balance);
+            deposit(account);
 
         }
         else if (choice == 3) {
 
-            balance = withdraw(balance);
+            withdraw(account);
 
         }
         else if (choice == 4) {
