@@ -120,9 +120,9 @@ int main() {
 
    vector<Account> accounts;
 
-    accounts.push_back(Account(10001, "Asim", 1000.00));
-    accounts.push_back(Account(10002, "Ahmed", 2000.00));
-    accounts.push_back(Account(10003, "John", 1500.00));
+    accounts.push_back(Account(10001, "Asim", 1000.00, 1234));
+    accounts.push_back(Account(10002, "Ahmed", 2000.00, 5678));
+    accounts.push_back(Account(10003, "John", 1500.00, 9101));
 
     int accountNumber;
 
