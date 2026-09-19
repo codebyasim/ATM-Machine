@@ -23,9 +23,19 @@ void Bank::saveAccounts(const std::string& filename) const {
     std::ofstream file(filename);
 
     for (const Account& account : accounts) {
-        file << account.getAccountNumber() << ","
+
+        file << "ACCOUNT,"
+             << account.getAccountNumber() << ","
              << account.getAccountHolder() << ","
              << account.getBalance() << "\n";
+
+        for (const Transaction& transaction : account.getTransactions()) {
+
+            file << "TRANSACTION,"
+                 << account.getAccountNumber() << ","
+                 << transaction.getType() << ","
+                 << transaction.getAmount() << "\n";
+        }
     }
 }
 
@@ -36,16 +46,44 @@ void Bank::loadAccounts(const std::string& filename) {
         return;
     }
 
-    int number;
-    std::string name;
-    double balance;
+    std::string type;
 
-    char comma;
+    while (std::getline(file, type, ',')) {
 
-    while (file >> number >> comma
-                && std::getline(file, name, ',')
-                && file >> balance) {
+        if (type == "ACCOUNT") {
 
-        accounts.emplace_back(number, name, balance, 1234);
+            int number;
+            std::string name;
+            double balance;
+            char comma;
+
+            file >> number >> comma;
+            std::getline(file, name, ',');
+            file >> balance;
+            file.ignore();
+
+            accounts.emplace_back(number, name, balance, 1234);
+        }
+
+        else if (type == "TRANSACTION") {
+
+            int accountNumber;
+            std::string transactionType;
+            double amount;
+            char comma;
+
+            file >> accountNumber >> comma;
+            std::getline(file, transactionType, ',');
+            file >> amount;
+            file.ignore();
+
+            Account* account = findAccount(accountNumber);
+
+            if (account != nullptr) {
+                account->addTransaction(
+                    Transaction(transactionType, amount)
+                );
+            }
+        }
     }
 }

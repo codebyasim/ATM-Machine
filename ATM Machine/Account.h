@@ -28,6 +28,7 @@ public:
     double getBalance() const;
 
     const std::vector<Transaction>& getTransactions() const;
+    void addTransaction(const Transaction& transaction);
 };
 
 #endif
