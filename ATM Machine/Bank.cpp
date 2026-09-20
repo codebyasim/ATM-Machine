@@ -2,27 +2,28 @@
 #include <fstream>
 
 void Bank::addAccount(const Account& account) {
-    accounts.push_back(account);
+    accounts.emplace(account.getAccountNumber(), account);
 }
 
 Account* Bank::findAccount(int accountNumber) {
-    for (Account& account : accounts) {
-        if (account.getAccountNumber() == accountNumber) {
-            return &account;
-        }
+    auto it = accounts.find(accountNumber);
+
+    if (it != accounts.end()) {
+        return &it->second;
     }
 
     return nullptr;
 }
 
-std::vector<Account>& Bank::getAccounts() {
+std::unordered_map<int, Account>& Bank::getAccounts() {
     return accounts;
 }
 
 void Bank::saveAccounts(const std::string& filename) const {
     std::ofstream file(filename);
 
-    for (const Account& account : accounts) {
+    for (const auto& pair : accounts) {
+    const Account& account = pair.second;
 
         file << "ACCOUNT,"
              << account.getAccountNumber() << ","
@@ -62,7 +63,10 @@ void Bank::loadAccounts(const std::string& filename) {
             file >> balance;
             file.ignore();
 
-            accounts.emplace_back(number, name, balance, 1234);
+            accounts.emplace(
+                number,
+                Account(number, name, balance, 1234)
+            );
         }
 
         else if (type == "TRANSACTION") {
