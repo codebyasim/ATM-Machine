@@ -19,6 +19,7 @@ public:
 
     int getAccountNumber() const;
     std::string getAccountHolder() const;
+    int getPin() const;
 
     bool verifyPin(int enteredPin) const;
 

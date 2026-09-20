@@ -46,7 +46,8 @@ void Bank::saveAccounts(const std::string& filename) const {
         file << "ACCOUNT,"
              << account.getAccountNumber() << ","
              << account.getAccountHolder() << ","
-             << account.getBalance() << "\n";
+             << account.getBalance() << ","
+             << account.getPin() << "\n";
 
         for (const Transaction& transaction : account.getTransactions()) {
 
@@ -74,16 +75,17 @@ void Bank::loadAccounts(const std::string& filename) {
             int number;
             std::string name;
             double balance;
+            int pin;
             char comma;
 
             file >> number >> comma;
             std::getline(file, name, ',');
-            file >> balance;
+            file >> balance >> comma >> pin;
             file.ignore();
 
             accounts.emplace(
                 number,
-                Account(number, name, balance, 1234)
+                Account(number, name, balance, pin)
             );
         }
 

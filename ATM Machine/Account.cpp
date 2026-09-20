@@ -13,6 +13,10 @@ int Account::getAccountNumber() const {
     return accountNumber;
 }
 
+int Account::getPin() const {
+    return pin;
+}
+
 std::string Account::getAccountHolder() const {
     return accountHolder;
 }
