@@ -109,19 +109,21 @@ void transferMoney(Account& sender, Bank& bank) {
     cout << "Enter amount to transfer: GBP ";
     cin >> amount;
 
-    if (cin.fail() || amount <= 0) {
+    if (cin.fail()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid amount.\n";
         return;
-    }
+}
 
-    if (!sender.transfer(*recipient, amount)) {
-        cout << "Insufficient balance.\n";
-        return;
-    }
+    try {
+        sender.transfer(*recipient, amount);
 
-    cout << "Transfer successful.\n";
+        cout << "Transfer successful.\n";
+}
+    catch (const std::exception& e) {
+        cout << "Error: " << e.what() << "\n";
+}
 }
 
 int main() {

@@ -54,18 +54,29 @@ bool Account::withdraw(double amount) {
 }
 
 bool Account::transfer(Account& recipient, double amount) {
-    if (amount <= 0 || amount > balance) {
-        return false;
+
+    if (amount <= 0) {
+        throw std::runtime_error(
+            "Transfer amount must be greater than zero."
+        );
+    }
+
+    if (amount > balance) {
+        throw std::runtime_error(
+            "Insufficient balance."
+        );
     }
 
     balance -= amount;
     recipient.balance += amount;
 
-    transactions.push_back(Transaction("Transfer to " +
-                                       recipient.getAccountHolder(), amount));
+    transactions.push_back(
+        Transaction("Transfer to " + recipient.getAccountHolder(), amount)
+    );
 
-    recipient.transactions.push_back(Transaction("Transfer from " +
-                                                 accountHolder, amount));
+    recipient.transactions.push_back(
+        Transaction("Transfer from " + accountHolder, amount)
+    );
 
     return true;
 }
