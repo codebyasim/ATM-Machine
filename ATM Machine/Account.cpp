@@ -31,13 +31,24 @@ void Account::deposit(double amount) {
 }
 
 bool Account::withdraw(double amount) {
-    if (amount <= 0 || amount > balance) {
-        return false;
+
+    if (amount <= 0) {
+        throw std::runtime_error(
+            "Withdrawal amount must be greater than zero."
+        );
+    }
+
+    if (amount > balance) {
+        throw std::runtime_error(
+            "Insufficient balance."
+        );
     }
 
     balance -= amount;
 
-    transactions.push_back(Transaction("Withdrawal", amount));
+    transactions.push_back(
+        Transaction("Withdrawal", amount)
+    );
 
     return true;
 }

@@ -26,7 +26,7 @@ void deposit(Account& account) {
     cout << "Enter deposit: GBP ";
     cin >> amount;
 
-    if (cin.fail() || amount <= 0) {
+    if (cin.fail()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid amount.\n";
@@ -37,10 +37,11 @@ void deposit(Account& account) {
         account.deposit(amount);
 
         cout << "Deposit successful. Balance: GBP "
-            << account.getBalance() << "\n";
-}
+             << account.getBalance() << "\n";
+    }
     catch (const std::exception& e) {
         cout << "Error: " << e.what() << "\n";
+    }
 }
 
 void withdraw(Account& account) {
@@ -55,14 +56,15 @@ void withdraw(Account& account) {
         cout << "Invalid amount.\n";
         return;
     }
+    try {
+        account.withdraw(amount);
 
-    if (!account.withdraw(amount)) {
-        cout << "Insufficient balance.\n";
-        return;
-    }
-
-    cout << "Withdrawal successful. Balance: GBP "
-         << account.getBalance() << "\n";
+        cout << "Withdrawal successful. Balance: GBP "
+            << account.getBalance() << "\n";
+}
+    catch (const std::exception& e) {
+        cout << "Error: " << e.what() << "\n";
+}
 }
 
 void showTransactionHistory(const Account& account) {
