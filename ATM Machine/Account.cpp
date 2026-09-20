@@ -1,4 +1,5 @@
 #include "Account.h"
+#include <stdexcept>
 
 Account::Account(int number, std::string name, double initialBalance, int accountPin) {
     accountNumber = number;
@@ -21,10 +22,12 @@ bool Account::verifyPin(int enteredPin) const {
 }
 
 void Account::deposit(double amount) {
-    if (amount > 0) {
-        balance += amount;
-        transactions.push_back(Transaction("Deposit", amount));
+    if (amount <= 0) {
+        throw std::runtime_error("Deposit amount must be greater than zero.");
     }
+
+    balance += amount;
+    transactions.push_back(Transaction("Deposit", amount));
 }
 
 bool Account::withdraw(double amount) {

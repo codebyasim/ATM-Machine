@@ -33,10 +33,14 @@ void deposit(Account& account) {
         return;
     }
 
-    account.deposit(amount);
+    try {
+        account.deposit(amount);
 
-    cout << "Deposit successful. Balance: GBP "
-         << account.getBalance() << "\n";
+        cout << "Deposit successful. Balance: GBP "
+            << account.getBalance() << "\n";
+}
+    catch (const std::exception& e) {
+        cout << "Error: " << e.what() << "\n";
 }
 
 void withdraw(Account& account) {
