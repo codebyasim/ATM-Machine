@@ -1,5 +1,6 @@
 #include "Bank.h"
 #include <fstream>
+#include <algorithm>
 
 void Bank::addAccount(const Account& account) {
     accounts.emplace(account.getAccountNumber(), account);
@@ -17,6 +18,23 @@ Account* Bank::findAccount(int accountNumber) {
 
 std::unordered_map<int, Account>& Bank::getAccounts() {
     return accounts;
+}
+
+Account* Bank::findAccountWithBalance(double minimumBalance) {
+
+    auto result = std::find_if(
+        accounts.begin(),
+        accounts.end(),
+        [minimumBalance](const auto& pair) {
+            return pair.second.getBalance() >= minimumBalance;
+        }
+    );
+
+    if (result != accounts.end()) {
+        return &result->second;
+    }
+
+    return nullptr;
 }
 
 void Bank::saveAccounts(const std::string& filename) const {

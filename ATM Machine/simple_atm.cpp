@@ -11,7 +11,8 @@ void displayMenu() {
     cout << "3. Withdraw\n";
     cout << "4. Transaction History\n";
     cout << "5. Transfer Money\n";
-    cout << "6. Exit\n";
+    cout << "6. Find Account by Minimum Balance\n";
+    cout << "7. Exit\n";
     cout << "Choose: ";
 }
 
@@ -123,8 +124,31 @@ void transferMoney(Account& sender, Bank& bank) {
 }
     catch (const std::exception& e) {
         cout << "Error: " << e.what() << "\n";
+    }   
 }
+    
+void findAccountByMinimumBalance(Bank& bank) {
+    double minimumBalance;
+
+    cout << "Enter minimum balance: GBP ";
+    cin >> minimumBalance;
+
+    Account* account = bank.findAccountWithBalance(minimumBalance);
+
+    if (account != nullptr) {
+        cout << "Account found: "
+             << account->getAccountNumber()
+             << " - "
+             << account->getAccountHolder()
+             << " - Balance: GBP "
+             << account->getBalance()
+             << "\n";
+    }
+    else {
+        cout << "No account found with that balance.\n";
+    }
 }
+
 
 int main() {
 
@@ -203,6 +227,10 @@ int main() {
             transferMoney(*account, bank);
 
         else if (choice == 6) {
+        findAccountByMinimumBalance(bank);
+    }
+
+        else if (choice == 7) {
         bank.saveAccounts("accounts.txt");
         cout << "Account data saved.\n";
         cout << "Thank you for using the ATM.\n";

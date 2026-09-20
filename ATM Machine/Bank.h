@@ -13,6 +13,7 @@ private:
 public:
     void addAccount(const Account& account);
     Account* findAccount(int accountNumber);
+    Account* findAccountWithBalance(double minimumBalance);
     std::unordered_map<int, Account>& getAccounts();
     
     void saveAccounts(const std::string& filename) const;
