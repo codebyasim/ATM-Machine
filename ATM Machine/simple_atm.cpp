@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <limits>
 #include "Bank.h"
+#include "SavingsAccount.h"
 
 using namespace std;
 
@@ -149,8 +150,21 @@ void findAccountByMinimumBalance(Bank& bank) {
     }
 }
 
+void testSavingsAccount() {
+    SavingsAccount savings(10004, "Savings User", 1000, 9999);
+
+    cout << "Savings balance: GBP "
+         << savings.getBalance() << "\n";
+
+    savings.applyInterest(5);
+
+    cout << "After 5% interest: GBP "
+         << savings.getBalance() << "\n";
+}
 
 int main() {
+
+    testSavingsAccount();
 
     Bank bank;
 
