@@ -17,6 +17,8 @@ private:
 public:
     Account(int number, std::string name, double initialBalance, int accountPin);
 
+    virtual void displayAccountType() const;
+
     int getAccountNumber() const;
     std::string getAccountHolder() const;
     int getPin() const;

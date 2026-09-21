@@ -1,5 +1,6 @@
 #include "Account.h"
 #include <stdexcept>
+#include <iostream>
 
 Account::Account(int number, std::string name, double initialBalance, int accountPin) {
     accountNumber = number;
@@ -32,6 +33,10 @@ void Account::deposit(double amount) {
 
     balance += amount;
     transactions.push_back(Transaction("Deposit", amount));
+}
+
+void Account::displayAccountType() const {
+    std::cout << "Account Type: Standard Account\n";
 }
 
 bool Account::withdraw(double amount) {

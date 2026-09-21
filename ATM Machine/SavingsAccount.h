@@ -14,6 +14,8 @@ public:
     );
 
     void applyInterest(double rate);
+
+    void displayAccountType() const override;
 };
 
 #endif

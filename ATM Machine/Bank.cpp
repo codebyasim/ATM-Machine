@@ -3,20 +3,23 @@
 #include <algorithm>
 
 void Bank::addAccount(const Account& account) {
-    accounts.emplace(account.getAccountNumber(), account);
+    accounts.emplace(
+        account.getAccountNumber(),
+        std::make_unique<Account>(account)
+    );
 }
 
 Account* Bank::findAccount(int accountNumber) {
     auto it = accounts.find(accountNumber);
 
     if (it != accounts.end()) {
-        return &it->second;
+        return it->second.get();
     }
 
     return nullptr;
 }
 
-std::unordered_map<int, Account>& Bank::getAccounts() {
+std::unordered_map<int, std::unique_ptr<Account>>& Bank::getAccounts() {
     return accounts;
 }
 
@@ -26,12 +29,12 @@ Account* Bank::findAccountWithBalance(double minimumBalance) {
         accounts.begin(),
         accounts.end(),
         [minimumBalance](const auto& pair) {
-            return pair.second.getBalance() >= minimumBalance;
+            return pair.second->getBalance() >= minimumBalance;
         }
     );
 
     if (result != accounts.end()) {
-        return &result->second;
+        return result->second.get();
     }
 
     return nullptr;
@@ -41,7 +44,7 @@ void Bank::saveAccounts(const std::string& filename) const {
     std::ofstream file(filename);
 
     for (const auto& pair : accounts) {
-    const Account& account = pair.second;
+    const Account& account = *pair.second;
 
         file << "ACCOUNT,"
              << account.getAccountNumber() << ","
@@ -85,8 +88,8 @@ void Bank::loadAccounts(const std::string& filename) {
 
             accounts.emplace(
                 number,
-                Account(number, name, balance, pin)
-            );
+                std::make_unique<Account>(number, name, balance, pin)
+);
         }
 
         else if (type == "TRANSACTION") {

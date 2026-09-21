@@ -1,4 +1,5 @@
 #include "SavingsAccount.h"
+#include <iostream>
 
 SavingsAccount::SavingsAccount(
     int number,
@@ -13,4 +14,8 @@ SavingsAccount::SavingsAccount(
 void SavingsAccount::applyInterest(double rate) {
     double interest = getBalance() * rate / 100;
     deposit(interest);
+}
+
+void SavingsAccount::displayAccountType() const {
+    std::cout << "Account Type: Savings Account\n";
 }
