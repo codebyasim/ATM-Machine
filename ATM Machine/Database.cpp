@@ -60,3 +60,65 @@ bool Database::createTables() {
     std::cout << "Accounts table created successfully.\n";
     return true;
 }
+
+bool Database::saveAccount(const Account& account) {
+
+    const char* sql = R"(
+        INSERT INTO accounts
+        (account_number, account_holder, balance, pin)
+        VALUES (?, ?, ?, ?);
+    )";
+
+    sqlite3_stmt* statement;
+
+    int result = sqlite3_prepare_v2(
+        db,
+        sql,
+        -1,
+        &statement,
+        nullptr
+    );
+
+    if (result != SQLITE_OK) {
+        std::cout << "Failed to prepare account insert.\n";
+        return false;
+    }
+
+    sqlite3_bind_int(
+        statement,
+        1,
+        account.getAccountNumber()
+    );
+
+    sqlite3_bind_text(
+        statement,
+        2,
+        account.getAccountHolder().c_str(),
+        -1,
+        SQLITE_TRANSIENT
+    );
+
+    sqlite3_bind_double(
+        statement,
+        3,
+        account.getBalance()
+    );
+
+    sqlite3_bind_int(
+        statement,
+        4,
+        account.getPin()
+    );
+
+    result = sqlite3_step(statement);
+
+    sqlite3_finalize(statement);
+
+    if (result != SQLITE_DONE) {
+        std::cout << "Failed to save account.\n";
+        return false;
+    }
+
+    std::cout << "Account saved to database.\n";
+    return true;
+}
