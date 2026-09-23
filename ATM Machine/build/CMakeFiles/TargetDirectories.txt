@@ -1,0 +1,3 @@
+C:/Users/iasim/OneDrive/Desktop/C++/Projects/Simple ATM Machine/ATM Machine/ATM Machine/build/CMakeFiles/atm.dir
+C:/Users/iasim/OneDrive/Desktop/C++/Projects/Simple ATM Machine/ATM Machine/ATM Machine/build/CMakeFiles/edit_cache.dir
+C:/Users/iasim/OneDrive/Desktop/C++/Projects/Simple ATM Machine/ATM Machine/ATM Machine/build/CMakeFiles/rebuild_cache.dir
