@@ -27,3 +27,36 @@ void Database::close() {
         db = nullptr;
     }
 }
+
+bool Database::createTables() {
+
+    const char* sql = R"(
+        CREATE TABLE IF NOT EXISTS accounts (
+            account_number INTEGER PRIMARY KEY,
+            account_holder TEXT NOT NULL,
+            balance REAL NOT NULL,
+            pin INTEGER NOT NULL
+        );
+    )";
+
+    char* errorMessage = nullptr;
+
+    int result = sqlite3_exec(
+        db,
+        sql,
+        nullptr,
+        nullptr,
+        &errorMessage
+    );
+
+    if (result != SQLITE_OK) {
+        std::cout << "Failed to create accounts table: "
+                  << errorMessage << "\n";
+
+        sqlite3_free(errorMessage);
+        return false;
+    }
+
+    std::cout << "Accounts table created successfully.\n";
+    return true;
+}

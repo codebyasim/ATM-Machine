@@ -177,6 +177,10 @@ int main() {
         return 1;
 }
 
+    if (!database.createTables()) {
+        return 1;
+}
+
     Bank bank;
 
     bank.loadAccounts("accounts.txt");

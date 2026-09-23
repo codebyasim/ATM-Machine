@@ -14,6 +14,7 @@ public:
     ~Database();
 
     bool open(const std::string& filename);
+    bool createTables();
     void close();
 };
 
