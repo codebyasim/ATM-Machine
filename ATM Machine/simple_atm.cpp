@@ -3,6 +3,7 @@
 #include <limits>
 #include "Bank.h"
 #include "SavingsAccount.h"
+#include "Database.h"
 
 using namespace std;
 
@@ -169,6 +170,12 @@ void testSavingsAccount() {
 int main() {
 
     testSavingsAccount();
+
+    Database database;
+
+    if (!database.open("atm.db")) {
+        return 1;
+}
 
     Bank bank;
 
