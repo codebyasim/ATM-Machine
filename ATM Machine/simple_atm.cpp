@@ -181,6 +181,10 @@ int main() {
         return 1;
 }
 
+    Account testAccount(99999, "Test User", 500, 1111);
+
+    database.saveAccount(testAccount);
+
     Bank bank;
 
     bank.loadAccounts("accounts.txt");
