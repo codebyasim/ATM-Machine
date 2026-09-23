@@ -122,3 +122,52 @@ bool Database::saveAccount(const Account& account) {
     std::cout << "Account saved to database.\n";
     return true;
 }
+
+Account* Database::findAccount(int accountNumber) {
+
+    const char* sql = R"(
+        SELECT account_number, account_holder, balance, pin
+        FROM accounts
+        WHERE account_number = ?;
+    )";
+
+    sqlite3_stmt* statement;
+
+    int result = sqlite3_prepare_v2(
+        db,
+        sql,
+        -1,
+        &statement,
+        nullptr
+    );
+
+    if (result != SQLITE_OK) {
+        return nullptr;
+    }
+
+    sqlite3_bind_int(statement, 1, accountNumber);
+
+    result = sqlite3_step(statement);
+
+    if (result == SQLITE_ROW) {
+
+        int number = sqlite3_column_int(statement, 0);
+        const char* name =
+            reinterpret_cast<const char*>(
+                sqlite3_column_text(statement, 1)
+            );
+        double balance = sqlite3_column_double(statement, 2);
+        int pin = sqlite3_column_int(statement, 3);
+
+        Account* account =
+            new Account(number, name, balance, pin);
+
+        sqlite3_finalize(statement);
+
+        return account;
+    }
+
+    sqlite3_finalize(statement);
+
+    return nullptr;
+}

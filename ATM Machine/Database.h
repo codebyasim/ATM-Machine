@@ -4,6 +4,7 @@
 #include <sqlite3.h>
 #include <string>
 #include "Account.h"
+#include "Bank.h"
 
 class Database {
 
@@ -17,6 +18,7 @@ public:
     bool open(const std::string& filename);
     bool createTables();
     bool saveAccount(const Account& account);
+    Account* findAccount(int accountNumber);
     void close();
 };
 
