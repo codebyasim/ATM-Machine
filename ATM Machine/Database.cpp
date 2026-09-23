@@ -1,5 +1,6 @@
 #include "Database.h"
 #include <iostream>
+#include "Bank.h"
 
 Database::Database() {
     db = nullptr;
@@ -170,4 +171,65 @@ Account* Database::findAccount(int accountNumber) {
     sqlite3_finalize(statement);
 
     return nullptr;
+}
+
+bool Database::saveAccounts(
+    const std::unordered_map<int, std::unique_ptr<Account>>& accounts
+) {
+    for (const auto& pair : accounts) {
+
+        const Account& account = *pair.second;
+
+        if (!saveAccount(account)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Database::loadAccounts(Bank& bank) {
+
+    const char* sql = R"(
+        SELECT account_number, account_holder, balance, pin
+        FROM accounts;
+    )";
+
+    sqlite3_stmt* statement;
+
+    int result = sqlite3_prepare_v2(
+        db,
+        sql,
+        -1,
+        &statement,
+        nullptr
+    );
+
+    if (result != SQLITE_OK) {
+        std::cout << "Failed to load accounts.\n";
+        return false;
+    }
+
+    while (sqlite3_step(statement) == SQLITE_ROW) {
+
+        int number = sqlite3_column_int(statement, 0);
+
+        const char* name =
+            reinterpret_cast<const char*>(
+                sqlite3_column_text(statement, 1)
+            );
+
+        double balance = sqlite3_column_double(statement, 2);
+
+        int pin = sqlite3_column_int(statement, 3);
+
+        bank.addAccount(
+            Account(number, name, balance, pin)
+        );
+    }
+
+    sqlite3_finalize(statement);
+
+    std::cout << "Accounts loaded from database.\n";
+    return true;
 }

@@ -184,6 +184,7 @@ int main() {
     Bank bank;
 
     bank.loadAccounts("accounts.txt");
+    database.loadAccounts(bank);
 
     if (bank.getAccounts().empty()) {
         bank.addAccount(Account(10001, "Asim", 1000, 1234));
@@ -264,6 +265,9 @@ int main() {
 
         else if (choice == 7) {
         bank.saveAccounts("accounts.txt");
+
+        database.saveAccounts(bank.getAccounts());
+        
         cout << "Account data saved.\n";
         cout << "Thank you for using the ATM.\n";
         break;
