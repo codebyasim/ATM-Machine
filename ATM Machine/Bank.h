@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 #include "Account.h"
-#include <string>
 #include <memory>
 
 class Bank {
@@ -17,8 +16,6 @@ public:
     Account* findAccountWithBalance(double minimumBalance);
     std::unordered_map<int, std::unique_ptr<Account>>& getAccounts();
     
-    void saveAccounts(const std::string& filename) const;
-    void loadAccounts(const std::string& filename);
 };
 
 #endif

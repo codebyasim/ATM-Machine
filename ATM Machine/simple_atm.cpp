@@ -182,8 +182,7 @@ int main() {
 }
 
     Bank bank;
-
-    bank.loadAccounts("accounts.txt");
+    
     database.loadAccounts(bank);
 
     if (bank.getAccounts().empty()) {
@@ -264,7 +263,6 @@ int main() {
     }
 
         else if (choice == 7) {
-        bank.saveAccounts("accounts.txt");
 
         database.saveAccounts(bank.getAccounts());
         
