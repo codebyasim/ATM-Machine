@@ -181,25 +181,6 @@ int main() {
         return 1;
 }
 
-    Account testAccount(99999, "Test User", 500, 1111);
-
-    database.saveAccount(testAccount);
-
-    Account* foundAccount = database.findAccount(99999);
-
-    if (foundAccount != nullptr) {
-        cout << "Account found in database: "
-            << foundAccount->getAccountHolder()
-            << " - Balance: GBP "
-             << foundAccount->getBalance()
-             << "\n";
-
-        delete foundAccount;
-    }
-    else {
-        cout << "Account not found in database.\n";
-    }
-
     Bank bank;
 
     bank.loadAccounts("accounts.txt");
