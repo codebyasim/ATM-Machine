@@ -65,7 +65,7 @@ bool Database::createTables() {
 bool Database::saveAccount(const Account& account) {
 
     const char* sql = R"(
-        INSERT INTO accounts
+        INSERT OR REPLACE INTO accounts
         (account_number, account_holder, balance, pin)
         VALUES (?, ?, ?, ?);
     )";
