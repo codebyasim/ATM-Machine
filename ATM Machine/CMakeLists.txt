@@ -5,6 +5,8 @@ project(ATM_Machine)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_library(sqlite3 sqlite3.c)
+
 add_executable(atm
     simple_atm.cpp
     Account.cpp
@@ -15,11 +17,7 @@ add_executable(atm
 )
 
 target_include_directories(atm PRIVATE
-    "C:/Users/iasim/anaconda3/Library/include"
-)
-
-target_link_directories(atm PRIVATE
-    "C:/Users/iasim/anaconda3/Library/lib"
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(atm PRIVATE
