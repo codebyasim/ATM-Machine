@@ -1,0 +1,5 @@
+build/
+*.exe
+googletest/
+atm.db
+test_account.cpp
