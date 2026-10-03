@@ -1,6 +1,7 @@
 #include "Bank.h"
 #include <algorithm>
 
+//class with method and parameter
 void Bank::addAccount(const Account& account) {
     accounts.emplace(
         account.getAccountNumber(),
@@ -8,6 +9,7 @@ void Bank::addAccount(const Account& account) {
     );
 }
 
+//class with method and parameter
 Account* Bank::findAccount(int accountNumber) {
     auto it = accounts.find(accountNumber);
 
@@ -22,6 +24,7 @@ std::unordered_map<int, std::unique_ptr<Account>>& Bank::getAccounts() {
     return accounts;
 }
 
+//class with method and parameter
 Account* Bank::findAccountWithBalance(double minimumBalance) {
 
     auto result = std::find_if(

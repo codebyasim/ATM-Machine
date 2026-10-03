@@ -14,14 +14,16 @@ private:
     int pin;
     std::vector<Transaction> transactions;
 
+// Constructor
 public:
     Account(int number, std::string name, double initialBalance, int accountPin);
 
     virtual void displayAccountType() const;
-
+    
+    // Getters functions
     int getAccountNumber() const;
     std::string getAccountHolder() const;
-    int getPin() const;
+    int getPin() const; 
 
     bool verifyPin(int enteredPin) const;
 

@@ -2,11 +2,16 @@
 #include <stdexcept>
 #include <iostream>
 
-Account::Account(int number, std::string name, double initialBalance, int accountPin) {
-    accountNumber = number;
-    accountHolder = name;
-    balance = initialBalance;
-    pin = accountPin;
+//Account constructor
+Account::Account(int number,
+        std::string name, 
+        double initialBalance, 
+        int accountPin) {
+    
+        accountNumber = number;
+        accountHolder = name;
+        balance = initialBalance;
+        pin = accountPin;
 }
 
 
