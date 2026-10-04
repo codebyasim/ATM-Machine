@@ -94,24 +94,12 @@ void showTransactionHistory(const Account& account) {
     }
 }
 
-void transferMoney(Account& sender, Bank& bank) {
+void transferMoney(Account& sender, BankService& bankService) {
     int recipientNumber;
     double amount;
 
     cout << "Enter recipient account number: ";
     cin >> recipientNumber;
-
-    Account* recipient = bank.findAccount(recipientNumber);
-
-    if (recipient == nullptr) {
-        cout << "Recipient account not found.\n";
-        return;
-    }
-
-    if (recipient == &sender) {
-        cout << "You cannot transfer to your own account.\n";
-        return;
-    }
 
     cout << "Enter amount to transfer: GBP ";
     cin >> amount;
@@ -121,16 +109,26 @@ void transferMoney(Account& sender, Bank& bank) {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Invalid amount.\n";
         return;
-}
+    }
 
     try {
-        sender.transfer(*recipient, amount);
+        bool success = bankService.transfer(
+            sender,
+            recipientNumber,
+            amount
+        );
 
-        cout << "Transfer successful.\n";
-}
+        if (success) {
+            cout << "Transfer successful.\n";
+        }
+        else {
+            cout << "Transfer failed. Recipient account not found "
+                 << "or invalid recipient.\n";
+        }
+    }
     catch (const std::exception& e) {
         cout << "Error: " << e.what() << "\n";
-    }   
+    }
 }
     
 void findAccountByMinimumBalance(Bank& bank) {
@@ -262,7 +260,7 @@ int main() {
             showTransactionHistory(*account);
 
         else if (choice == 5)
-            transferMoney(*account, bank);
+            transferMoney(*account, bankService);
 
         else if (choice == 6) {
         findAccountByMinimumBalance(bank);
