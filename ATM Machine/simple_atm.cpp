@@ -4,6 +4,7 @@
 #include "Bank.h"
 #include "SavingsAccount.h"
 #include "Database.h"
+#include "BankService.h"
 
 using namespace std;
 
@@ -182,6 +183,7 @@ int main() {
 }
 
     Bank bank;
+    BankService bankService(bank);
     
     database.loadAccounts(bank);
 
