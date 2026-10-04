@@ -50,7 +50,7 @@ void deposit(Account& account, BankService& bankService) {
     }
 }
 
-void withdraw(Account& account) {
+void withdraw(Account& account, BankService& bankService) {
     double amount;
 
     cout << "Enter withdrawal: GBP ";
@@ -62,15 +62,16 @@ void withdraw(Account& account) {
         cout << "Invalid amount.\n";
         return;
     }
+
     try {
-        account.withdraw(amount);
+        bankService.withdraw(account, amount);
 
         cout << "Withdrawal successful. Balance: GBP "
-            << account.getBalance() << "\n";
-}
+             << bankService.getBalance(account) << "\n";
+    }
     catch (const std::exception& e) {
         cout << "Error: " << e.what() << "\n";
-}
+    }
 }
 
 void showTransactionHistory(const Account& account) {
@@ -255,7 +256,7 @@ int main() {
             deposit(*account, bankService);
 
         else if (choice == 3)
-            withdraw(*account);
+           withdraw(*account, bankService);
 
         else if (choice == 4)
             showTransactionHistory(*account);
