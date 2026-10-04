@@ -204,7 +204,6 @@ int main() {
 
     cout << "\nEnter account number: ";
     cin >> number;
-
     Account* account = bank.findAccount(number);
 
     if (account == nullptr) {
@@ -220,13 +219,15 @@ int main() {
         cout << "Enter PIN: ";
         cin >> enteredPin;
 
-        if (account->verifyPin(enteredPin)) {
+        account = bankService.login(number, enteredPin);
+
+        if (account != nullptr) {
             authenticated = true;
             break;
         }
 
         cout << "Incorrect PIN. Attempts remaining: "
-             << attempts - 1 << "\n";
+            << attempts - 1 << "\n";
     }
 
     if (!authenticated) {
