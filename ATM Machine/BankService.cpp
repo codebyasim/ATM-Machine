@@ -5,8 +5,6 @@ BankService::BankService(Bank& bank, Database& database)
     : bank(bank), database(database)
 {
 }
-{
-}
 
 // Login
 Account* BankService::login(int accountNumber, int pin) {
@@ -57,4 +55,12 @@ bool BankService::transfer(
     }
 
     return sender.transfer(*recipient, amount);
+}
+
+    bool BankService::saveAccount(Account& account) {
+    return database.saveAccount(account);
+}
+
+    bool BankService::saveAllAccounts() {
+    return database.saveAccounts(bank.getAccounts());
 }

@@ -24,6 +24,10 @@ public:
     bool withdraw(Account& account, double amount);
 
     bool transfer(Account& sender, int recipientNumber, double amount);
+
+    bool saveAccount(Account& account);
+
+    bool saveAllAccounts();
 };
 
 #endif

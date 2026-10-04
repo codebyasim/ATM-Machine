@@ -176,16 +176,16 @@ int main() {
     Database database;
 
     if (!database.open("atm.db")) {
-        return 1;
-}
+    return 1;
+    }
 
     if (!database.createTables()) {
-        return 1;
-}
+    return 1;
+    }
 
     Bank bank;
-    BankService bankService(bank);
-    
+    BankService bankService(bank, database);
+
     database.loadAccounts(bank);
 
     if (bank.getAccounts().empty()) {
@@ -267,8 +267,8 @@ int main() {
     }
 
         else if (choice == 7) {
-
-        database.saveAccounts(bank.getAccounts());
+  
+            bankService.saveAllAccounts();
         
         cout << "Account data saved.\n";
         cout << "Thank you for using the ATM.\n";
