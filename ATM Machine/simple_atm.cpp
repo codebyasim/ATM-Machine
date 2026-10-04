@@ -26,7 +26,7 @@ void checkBalance(Account& account, BankService& bankService) {
          << "\n";
 }
 
-void deposit(Account& account) {
+void deposit(Account& account, BankService& bankService) {
     double amount;
 
     cout << "Enter deposit: GBP ";
@@ -40,10 +40,10 @@ void deposit(Account& account) {
     }
 
     try {
-        account.deposit(amount);
+        bankService.deposit(account, amount);
 
         cout << "Deposit successful. Balance: GBP "
-             << account.getBalance() << "\n";
+             << bankService.getBalance(account) << "\n";
     }
     catch (const std::exception& e) {
         cout << "Error: " << e.what() << "\n";
@@ -252,7 +252,7 @@ int main() {
             checkBalance(*account, bankService);
 
         else if (choice == 2)
-            deposit(*account);
+            deposit(*account, bankService);
 
         else if (choice == 3)
             withdraw(*account);
