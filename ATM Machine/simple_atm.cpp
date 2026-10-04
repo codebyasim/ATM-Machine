@@ -19,9 +19,11 @@ void displayMenu() {
     cout << "Choose: ";
 }
 
-void checkBalance(const Account& account) {
+void checkBalance(Account& account, BankService& bankService) {
     cout << fixed << setprecision(2);
-    cout << "Balance: GBP " << account.getBalance() << "\n";
+    cout << "Balance: GBP "
+         << bankService.getBalance(account)
+         << "\n";
 }
 
 void deposit(Account& account) {
@@ -247,7 +249,7 @@ int main() {
         cin >> choice;
 
         if (choice == 1)
-            checkBalance(*account);
+            checkBalance(*account, bankService);
 
         else if (choice == 2)
             deposit(*account);
