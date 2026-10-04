@@ -1,8 +1,10 @@
 #include "BankService.h"
 
 // Constructor
-BankService::BankService(Bank& bank)
-    : bank(bank)
+BankService::BankService(Bank& bank, Database& database)
+    : bank(bank), database(database)
+{
+}
 {
 }
 
