@@ -1,5 +1,6 @@
 #include "BankingServer.h"
 #include <iostream>
+#include <cstring>
 
 BankingServer::BankingServer(BankService& bankService)
     : bankService(bankService), serverSocket(INVALID_SOCKET)
@@ -67,7 +68,7 @@ void BankingServer::start() {
     nullptr,
     nullptr
 );
-    // buffer store data temporary
+    // buffer store data temporary when recieved
     char buffer[1024];
 
     int bytesReceived = recv(
@@ -86,6 +87,16 @@ void BankingServer::start() {
         std::cout << "Received from ATM: "
               << buffer << "\n";
 }
+
+    // response back to atm client
+    const char* response = "Request received by banking server.";
+
+    send(
+        clientSocket,
+        response,
+        static_cast<int>(strlen(response)),
+        0
+);
 
 if (clientSocket == INVALID_SOCKET) {
     std::cout << "Failed to accept client connection.\n";
