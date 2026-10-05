@@ -3,6 +3,7 @@
 #include <cstring>
 #include <thread>
 #include <mutex>
+#include <sstream>
 
 BankingServer::BankingServer(BankService& bankService)
     : bankService(bankService), serverSocket(INVALID_SOCKET)
@@ -94,6 +95,23 @@ while (true) {
 
         if (bytesReceived > 0) {
             buffer[bytesReceived] = '\0';
+
+            std::string request(buffer);
+
+            std::stringstream ss(request);
+
+            std::string command;
+            int accountNumber;
+            int pin;
+
+            ss >> command >> accountNumber;
+            
+            if (command == "BALANCE") {
+            Account* account = bankService.login(accountNumber, 0);
+}
+
+            std::cout << "Request: "
+                << request << "\n";
 
             std::cout << "Received from ATM: "
                       << buffer << "\n";
