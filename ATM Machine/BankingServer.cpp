@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <thread>
+#include <mutex>
 
 BankingServer::BankingServer(BankService& bankService)
     : bankService(bankService), serverSocket(INVALID_SOCKET)
@@ -77,7 +78,10 @@ while (true) {
         continue;
     }
 
+
     std::thread clientThread([this, clientSocket]() {
+
+        std::lock_guard<std::mutex> lock(bankMutex);
 
         char buffer[1024];
 
@@ -110,6 +114,7 @@ while (true) {
 
     clientThread.detach();
 }
+
 
 
     if (serverSocket == INVALID_SOCKET) {
