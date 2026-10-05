@@ -5,6 +5,8 @@
 #include "SavingsAccount.h"
 #include "Database.h"
 #include "BankService.h"
+#include "BankingServer.h"
+#include <thread>
 
 using namespace std;
 
@@ -186,6 +188,11 @@ int main() {
     Bank bank;
     BankService bankService(bank, database);
 
+    BankingServer server(bankService);
+
+    // thread
+    std::thread serverThread(&BankingServer::start, &server);
+
     database.loadAccounts(bank);
 
     if (bank.getAccounts().empty()) {
@@ -279,5 +286,6 @@ int main() {
             cout << "Invalid choice.\n";
     }
 
+        serverThread.join();
     return 0;
 }

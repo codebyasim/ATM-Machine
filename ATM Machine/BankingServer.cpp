@@ -1,6 +1,7 @@
 #include "BankingServer.h"
 #include <iostream>
 #include <cstring>
+#include <thread>
 
 BankingServer::BankingServer(BankService& bankService)
     : bankService(bankService), serverSocket(INVALID_SOCKET)
@@ -51,62 +52,65 @@ void BankingServer::start() {
 
     std::cout << "Server bound to port 8080.\n";   
     
-    //listen atm clients
-    if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
-        std::cout << "Failed to listen on port 8080.\n";
-
-        closesocket(serverSocket);
-        WSACleanup();
-        return;
-}
-
-    std::cout << "Banking server is listening on port 8080.\n";
-
-    //accept client request
-    SOCKET clientSocket = accept(
-    serverSocket,
-    nullptr,
-    nullptr
-);
-    // buffer store data temporary when recieved
-    char buffer[1024];
-
-    int bytesReceived = recv(
-    clientSocket,
-    buffer,
-    sizeof(buffer) - 1,
-    0
-);
-
-    if (bytesReceived == SOCKET_ERROR) {
-        std::cout << "Failed to receive data.\n";
-}
-    else {
-        buffer[bytesReceived] = '\0';
-
-        std::cout << "Received from ATM: "
-              << buffer << "\n";
-}
-
-    // response back to atm client
-    const char* response = "Request received by banking server.";
-
-    send(
-        clientSocket,
-        response,
-        static_cast<int>(strlen(response)),
-        0
-);
-
-if (clientSocket == INVALID_SOCKET) {
-    std::cout << "Failed to accept client connection.\n";
+    // Listen for ATM clients
+if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
+    std::cout << "Failed to listen on port 8080.\n";
 
     closesocket(serverSocket);
     WSACleanup();
     return;
 }
 
-    std::cout << "ATM client connected.\n";
+std::cout << "Banking server is listening on port 8080.\n";
+
+// Accept multiple client requests
+while (true) {
+
+    SOCKET clientSocket = accept(
+        serverSocket,
+        nullptr,
+        nullptr
+    );
+
+    if (clientSocket == INVALID_SOCKET) {
+        std::cout << "Failed to accept client.\n";
+        continue;
+    }
+
+    std::thread clientThread([this, clientSocket]() {
+
+        char buffer[1024];
+
+        int bytesReceived = recv(
+            clientSocket,
+            buffer,
+            sizeof(buffer) - 1,
+            0
+        );
+
+        if (bytesReceived > 0) {
+            buffer[bytesReceived] = '\0';
+
+            std::cout << "Received from ATM: "
+                      << buffer << "\n";
+
+            const char* response =
+                "Request received by banking server.";
+
+            send(
+                clientSocket,
+                response,
+                static_cast<int>(strlen(response)),
+                0
+            );
+        }
+
+        closesocket(clientSocket);
+    });
+
+    clientThread.detach();
+}
+
 
     if (serverSocket == INVALID_SOCKET) {
         std::cout << "Failed to create server socket.\n";

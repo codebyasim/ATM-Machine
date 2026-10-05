@@ -28,3 +28,11 @@ target_link_libraries(atm PRIVATE
     sqlite3
     ws2_32
 )
+
+add_executable(atm_client
+    ATMClient.cpp
+)
+
+target_link_libraries(atm_client PRIVATE
+    ws2_32
+)

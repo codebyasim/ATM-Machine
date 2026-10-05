@@ -3,12 +3,14 @@
 
 #include "BankService.h"
 #include <winsock2.h>
+#include <mutex>
 
 class BankingServer {
 
 private:
     BankService& bankService;
     SOCKET serverSocket;
+    std::mutex bankMutex;   
 
 public:
     BankingServer(BankService& bankService);
