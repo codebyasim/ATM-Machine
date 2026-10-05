@@ -13,6 +13,7 @@ add_executable(atm
     SavingsAccount.cpp
     Database.cpp
     BankService.cpp
+    BankingServer.cpp
 )
 
 target_include_directories(atm PRIVATE
