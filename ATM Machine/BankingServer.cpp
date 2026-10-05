@@ -34,6 +34,7 @@ void BankingServer::start() {
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(8080);
 
+    // bind provide ip address and connect it to port number
     if (bind(
         serverSocket,
         reinterpret_cast<sockaddr*>(&serverAddress),
@@ -47,7 +48,54 @@ void BankingServer::start() {
     return;
 }
 
-    std::cout << "Server bound to port 8080.\n";    
+    std::cout << "Server bound to port 8080.\n";   
+    
+    //listen atm clients
+    if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
+        std::cout << "Failed to listen on port 8080.\n";
+
+        closesocket(serverSocket);
+        WSACleanup();
+        return;
+}
+
+    std::cout << "Banking server is listening on port 8080.\n";
+
+    //accept client request
+    SOCKET clientSocket = accept(
+    serverSocket,
+    nullptr,
+    nullptr
+);
+    // buffer store data temporary
+    char buffer[1024];
+
+    int bytesReceived = recv(
+    clientSocket,
+    buffer,
+    sizeof(buffer) - 1,
+    0
+);
+
+    if (bytesReceived == SOCKET_ERROR) {
+        std::cout << "Failed to receive data.\n";
+}
+    else {
+        buffer[bytesReceived] = '\0';
+
+        std::cout << "Received from ATM: "
+              << buffer << "\n";
+}
+
+if (clientSocket == INVALID_SOCKET) {
+    std::cout << "Failed to accept client connection.\n";
+
+    closesocket(serverSocket);
+    WSACleanup();
+    return;
+}
+
+    std::cout << "ATM client connected.\n";
 
     if (serverSocket == INVALID_SOCKET) {
         std::cout << "Failed to create server socket.\n";
