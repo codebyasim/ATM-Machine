@@ -26,4 +26,5 @@ target_link_directories(atm PRIVATE
 
 target_link_libraries(atm PRIVATE
     sqlite3
+    ws2_32
 )
