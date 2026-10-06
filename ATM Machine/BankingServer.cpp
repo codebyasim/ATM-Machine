@@ -105,9 +105,29 @@ while (true) {
             int pin;
 
             ss >> command >> accountNumber;
-            
+
             if (command == "BALANCE") {
-            Account* account = bankService.login(accountNumber, 0);
+            Account* account = bankService.login(accountNumber, pin);
+
+            if (account != nullptr) {
+
+        double balance = bankService.getBalance(*account);
+
+        std::string response =
+    "Balance: GBP " + std::to_string(balance);
+
+    send(
+        clientSocket,
+        response.c_str(),
+        static_cast<int>(response.length()),
+        0
+    );
+
+}   
+        else {
+
+        std::cout << "Invalid account number or PIN.\n";
+}
 }
 
             std::cout << "Request: "
