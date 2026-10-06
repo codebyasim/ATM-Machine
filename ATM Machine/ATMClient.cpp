@@ -44,8 +44,7 @@ int main() {
 
     std::cout << "Connected to banking server.\n";
 
-    const char* message = "BALANCE 1001 1234";
-
+    const char* message = "DEPOSIT 1001 1234 200";
     send(
         clientSocket,
         message,
