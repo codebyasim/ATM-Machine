@@ -140,6 +140,10 @@ else if (command == "DEPOSIT") {
     if (account != nullptr) {
 
         bankService.deposit(*account, amount);
+        bool saved = bankService.saveAccount(*account);
+
+        std::cout << "Save result: "
+          << saved << "\n";
 
         double balance =
             bankService.getBalance(*account);
@@ -168,6 +172,57 @@ else if (command == "DEPOSIT") {
         );
     }
 }
+
+// withdraw command 
+else if (command == "WITHDRAW") {
+    Account* account = bankService.login(accountNumber, pin);
+
+    if (account != nullptr) {
+        try {
+            bool success = bankService.withdraw(*account, amount);
+
+            if (success) {
+                bool saved = bankService.saveAccount(*account);
+
+                if (saved) {
+                    double balance = bankService.getBalance(*account);
+
+                    std::string response =
+                        "Withdrawal successful. Balance: GBP " +
+                        std::to_string(balance);
+
+                    send(clientSocket, response.c_str(),
+                         static_cast<int>(response.length()), 0);
+                } else {
+                    std::string response =
+                        "Withdrawal processed, but saving failed.";
+
+                    send(clientSocket, response.c_str(),
+                         static_cast<int>(response.length()), 0);
+                }
+            } else {
+                std::string response =
+                    "Withdrawal failed. Check amount or balance.";
+
+                send(clientSocket, response.c_str(),
+                     static_cast<int>(response.length()), 0);
+            }
+        }
+        catch (const std::exception& e) {
+            std::string response = "Withdrawal failed: ";
+            response += e.what();
+
+            send(clientSocket, response.c_str(),
+                 static_cast<int>(response.length()), 0);
+        }
+    } else {
+        std::string response = "Invalid account number or PIN.";
+
+        send(clientSocket, response.c_str(),
+             static_cast<int>(response.length()), 0);
+    }
+}
+
 
             std::cout << "Request: "
                 << request << "\n";
