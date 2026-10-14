@@ -171,6 +171,7 @@ void testSavingsAccount() {
          << savings.getBalance() << "\n";
 }
 
+int main() {
     testSavingsAccount();
 
     Database database;
@@ -198,7 +199,7 @@ void testSavingsAccount() {
         bank.addAccount(Account(10002, "Ahmed", 2000, 5678));
         bank.addAccount(Account(10003, "John", 1500, 4321));
 
-        SavingsAccount savings maings(10004, "Savings User", 1000, 9999);
+        SavingsAccount savings(10004, "Savings User", 1000, 9999);
         bank.addAccount(savings);
 }
 
