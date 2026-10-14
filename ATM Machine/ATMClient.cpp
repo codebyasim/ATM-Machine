@@ -62,12 +62,25 @@ int main() {
                 std::to_string(accountNumber) + " " +
                 std::to_string(pin) + " " +
                 std::to_string(amount);
-        }
+           }
         else if (choice == 3) {
-            std::cout << "Withdrawal is not implemented "
-                         "in the network server yet.\n";
-            continue;
-        }
+        double amount;
+
+        std::cout << "Enter withdrawal amount: GBP ";
+        std::cin >> amount;
+
+        if (!std::cin || amount <= 0) {
+        std::cout << "Invalid amount.\n";
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        continue;
+    }
+
+    request = "WITHDRAW " +
+        std::to_string(accountNumber) + " " +
+        std::to_string(pin) + " " +
+        std::to_string(amount);
+}
         else {
             std::cout << "Invalid choice.\n";
             continue;
